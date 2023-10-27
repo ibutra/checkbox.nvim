@@ -20,8 +20,17 @@
 -- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 -- SOFTWARE.
 
+-- Initialize patterns
 local prefixPatterns = {"%-", "%*", "#+", "%->", "=>", "%d+%."}
 local skipPatterns = {"%-", "%*", "%->", "=>", "%d+%."}
+
+if vim.g.checkbox_prefixPatterns then
+	prefixPatterns = vim.g.checkbox_prefixPatterns
+end
+if vim.g.checkbox_skipPatterns then
+	prefixPatterns = vim.g.checkbox_skipPatterns
+end
+
 -- returns indentation level, checked status and text if the line has a checbox
 -- nil otherwise
 local function getCheckboxFromLine(lineNum)
@@ -174,4 +183,7 @@ local function switchAndUpdateCheckbox()
 	end
 end
 
-vim.keymap.set("n", "<leader>x", switchAndUpdateCheckbox)
+return {
+	checkbox = switchAndUpdateCheckbox
+}
+	
