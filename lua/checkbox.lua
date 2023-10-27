@@ -133,7 +133,7 @@ local function findChildren(startCheckbox)
 			if not skipped then
 				return children
 			end
-		elseif checkbox.indentation == startCheckbox.indentation then
+		elseif checkbox.indentation <= startCheckbox.indentation then
 			return children
 		elseif checkbox.indentation > startCheckbox.indentation then
 			table.insert(children, checkbox)
