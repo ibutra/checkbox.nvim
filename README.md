@@ -12,9 +12,24 @@ Parent and child items are updated automatically when a checkbox is changed. It
 is easily configurable what may come before the checkbox. Configuring what is
 skipped when searching for parents and child checkboxes alike is also possible.
 
+## Installation
+
+Use your preferred plugin manager and add
+```
+"ibutra/checkbox.nvim"
+```
+as plugin.
+
 ## Usage
 
-See the documentation: [Vim Helpfile](doc/checkbox.nvim.txt)
+Add a mapping to the provided function:
+
+```lua
+vim.keymap.set("n", "<leader>x", require("checkbox").checkbox)
+```
+
+For further details and configuration options see the documentation: 
+[Vim Helpfile](doc/checkbox.nvim.txt)
 
 ## License
 
