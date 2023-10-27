@@ -1,0 +1,111 @@
+*checkbox.nvim.txt*   Easily toggle checklist items
+
+1. Introduction ....................................... |checkbox-introduction|
+2. Usage ..................................................... |checkbox-usage|
+3. Configuration ..................................... |checkbox-configuration|
+  3.1 g:checkbox_prefixPatterns ..................... |checkbox-prefixPatterns|
+  3.2 g:checkbox_skipPatterns ......................... |checkbox-skipPatterns|
+4. Changelog ............................................. |checkbox-changelog|
+5. License ................................................. |checkbox-license|
+
+
+==============================================================================
+1. Introduction                                         *checkbox-introduction*
+
+checkbox.nvim is a simple plugin that switches checkbox items of the form 
+>
+  [ ] item
+  [X] item
+    [X] item
+      * [ ] item
+      - [X] item
+      1. [ ] item
+<
+
+It also allows automatic adding of a checkbox to a line.
+Furthermore it supports nested checkboxes and updates parents and children
+alike.
+
+==============================================================================
+2. Usage                                                       *checkbox-usage*
+
+To use the plugin bind a mapping to the returned function in the table:
+>
+  vim.keymap.set("n", "<leader>x", require("checkbox").checkbox)
+<
+This will toggle the current line's checkbox or add one if not present.
+This function will also update parent and child items to the following rules:
+If a checkbox is checked, all its children are checked as well. If a chekcbox
+is unchecked, all its children are unchecked as well.
+The parent of the changed checkbox will get updated. It will be set to checked
+if all its children are checked and to unchecked otherwise.
+
+==============================================================================
+3. Configuration                                       *checkbox-configuration*
+
+The following variables change the behaviour of this plugin:
+
+------------------------------------------------------------------------------
+3.1 g:checkbox_prefixPatterns                         *checkbox-prefixPatterns*
+              list
+              default: {"%-", "%*", "#+", "%->", "=>", "%d+%."}
+
+Set this option to lua patterns which come before the checkbox `[ ]`. I.e. >
+  vim.g.checkbox_prefixPatterns = {"%-", "%*", "%d+%."}
+Will create the checkbox after a `-`, `*` and `1.` item: >
+  - [ ] item
+  * [ ] item
+  12. [] item
+
+------------------------------------------------------------------------------
+3.1 g:checkbox_skipPatterns                             *checkbox-skipPatterns*
+              list
+              default:{"%-", "%*", "%->", "=>", "%d+%."} 
+
+Set this option to lua patterns which will be ignored when searching for
+parents and children. I.e. >
+  vim.g.checkbox_skipPatterns = {"%-", "%*", "%->", "=>"}
+Will make checkbox.nvim consider all checkboxes in the following example as
+connected: >
+  [ ] Root-Parent
+    -> Some note
+    [ ] Child-Item to Root
+    - Another note
+    [ ] Another Child to Root
+      * Bullets under todo item
+      * another bullet
+    [ ] Child-Parent
+      => More info
+      * [ ] Child
+      * [ ] Child
+
+==============================================================================
+4. Changelog                                               *checkbox-changelog*
+
+2023.10.27
+  * First release
+
+==============================================================================
+5. License                                                   *checkbox-license*
+MIT License
+
+Copyright (c) 2023 Stefan Rakel
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
