@@ -139,7 +139,6 @@ local function findChildren(startCheckbox)
 			table.insert(children, checkbox)
 		end
 	end
-	return children
 end
 
 local function updateFromChildren(checkbox)
@@ -147,8 +146,6 @@ local function updateFromChildren(checkbox)
 	if not children then
 		return
 	end
-	local total = 0
-	local checked = 0
 	for _, child in ipairs(children) do
 		if not child.checked then
 			setCheckbox(checkbox, false)
@@ -170,7 +167,7 @@ end
 
 local function switchAndUpdateCheckbox()
 	local lineNum = vim.fn.line(".")
-	checkbox = switchOrAddCheckbox(lineNum)
+	local checkbox = switchOrAddCheckbox(lineNum)
 	if checkbox then
 		-- Update children
 		updateChildren(checkbox)
@@ -186,4 +183,3 @@ end
 return {
 	checkbox = switchAndUpdateCheckbox
 }
-	
