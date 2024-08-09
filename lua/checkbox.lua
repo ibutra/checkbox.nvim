@@ -23,6 +23,7 @@
 -- Initialize patterns
 local prefixPatterns = {"%-", "%*", "#+", "%->", "=>", "%d+%."}
 local skipPatterns = {"%-", "%*", "%->", "=>", "%d+%."}
+local checkmarks = {"X", "x"} --UTF8 characters currently not supported
 
 if vim.g.checkbox_prefixPatterns then
 	prefixPatterns = vim.g.checkbox_prefixPatterns
@@ -36,12 +37,15 @@ end
 local function getCheckboxFromLine(lineNum)
 	local line = vim.fn.getline(lineNum)
 	for _, pat in ipairs(prefixPatterns) do
-		local pattern = "(%s*)(" .. pat .. "%s*)%[([ xX]?)%](.*)"
+		local pattern = "(%s*)(" .. pat .. "%s*)%[([ " .. vim.fn.join(checkmarks, "") .."]?)%](.*)"
 		local whitespace, before, checked, after = string.match(line, pattern)
 		if whitespace then
-			if checked == "x" or checked == "X" then
-				checked = true
-			else
+			for _, c in ipairs(checkmarks) do
+				if checked == c then
+					checked = true
+				end
+			end
+			if checked ~= true then
 				checked = false
 			end
 			whitespace = string.gsub(whitespace, "\t", " ")
@@ -55,7 +59,7 @@ end
 local function writeCheckbox(checkbox)
 	local checkedString = " "
 	if checkbox.checked then
-		checkedString = "X"
+		checkedString = checkmarks[1]
 	end
 	local newLine = string.rep(" ", checkbox.indentation) .. checkbox.before .. "[" .. checkedString .. "]" .. checkbox.after
 	vim.fn.setline(checkbox.lineNum, newLine)
